@@ -87,8 +87,7 @@ $(function () {
         });
 
         it('at least a single .entry element within the .feed container', (done) => {
-            const container = document.querySelector('.feed');
-            const entries = container.querySelectorAll('.entry');
+            const entries = document.querySelectorAll('.feed .entry');
             expect(entries.length).toBeGreaterThan(0);
             done();
         });
@@ -101,8 +100,10 @@ $(function () {
          */
         let before, after;
         beforeEach((done) => {
-            before = document.querySelector('.feed .entry').textContent;
-            loadFeed(1, done);
+            loadFeed(1, () => {  // get initial content for this suite so that the test will not depend on the results of another.
+                before = document.querySelector('.feed .entry').textContent;
+                loadFeed(2, done);  // invoke loadFeed a second time to change the content
+            });
         });
 
         it('content changes when a new feed is loaded', (done) => {
